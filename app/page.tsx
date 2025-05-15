@@ -1,3 +1,4 @@
+"use client"
 import AboutUs from "@/componenets/AboutUs";
 import ContactPage from "@/componenets/ContactPage";
 import HeroSection from "@/componenets/HeroSection";
