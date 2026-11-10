@@ -1,6 +1,6 @@
 "use client"
 import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView } from 'motion/react';
 
 const ContactPage = () => {
   const formRef = useRef<HTMLDivElement>(null);
@@ -23,7 +23,7 @@ const ContactPage = () => {
       y: 0,
       opacity: 1,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 100
       }
     }
@@ -35,7 +35,7 @@ const ContactPage = () => {
       scale: 1,
       opacity: 1,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 100,
         delay: 0.3
       }

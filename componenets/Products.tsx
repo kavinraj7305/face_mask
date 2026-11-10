@@ -1,185 +1,96 @@
 "use client";
 
-import React, { useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import "./Products.css";
+import { getFeaturedProducts, sizeOptions, startingPrice } from "@/lib/products";
 
-interface Product {
-  id: number;
-  name: string;
-  category: string;
-  price: string;
-  benefits: string;
-  image: string;
-}
+const featured = getFeaturedProducts();
 
-const Products: React.FC = () => {
-  const [activeCategory, setActiveCategory] = useState<string>("all");
-  const [hoveredProduct, setHoveredProduct] = useState<number | null>(null);
+const Products = () => {
   const router = useRouter();
 
-  const products: Product[] = [
-    {
-      id: 1,
-      name: "Ayurvedic Face Pack",
-      category: "face pack",
-      price: "₹500/kg",
-      benefits: "Brightens skin, reduces acne",
-      image:
-        "https://i.pinimg.com/736x/4d/00/1c/4d001c84470bce9f13c034a05399eab3.jpg",
-    },
-    {
-      id: 2,
-      name: "Turmeric Face Pack",
-      category: "face pack",
-      price: "₹500/kg",
-      benefits: "Brightens skin, reduces acne",
-      image:
-        "https://i.pinimg.com/474x/be/52/f4/be52f43cf114b93d0013c2f9c64b10ba.jpg",
-    },
-    {
-      id: 3,
-      name: "Herbal Face Pack",
-      category: "face pack",
-      price: "₹500/kg",
-      benefits: "Brightens skin, reduces acne",
-      image:
-        "https://i.pinimg.com/736x/6d/f4/72/6df4720fc4e18483489b8fdff857e08f.jpg",
-    },
-    {
-      id: 4,
-      name: "Herbal Ubtan Pack",
-      category: "face pack",
-      price: "₹500/kg",
-      benefits: "Brightens skin, reduces acne",
-      image:
-        "https://i.pinimg.com/736x/42/27/96/422796a4cf6404e4e365c802aeac0192.jpg",
-    },
-    {
-      id: 5,
-      name: "Sandalwood Nalangu Maavu",
-      category: "nalangu mavu",
-      price: "₹500/kg",
-      benefits: "Cooling effect, improves complexion",
-      image:
-        "https://i.pinimg.com/736x/1f/6f/fe/1f6ffeffb0f0e75f6a368716783c2060.jpg",
-    },
-    {
-      id: 6,
-      name: "Herbal Bath Powder",
-      category: "bath powder",
-      price: "₹500/kg",
-      benefits: "Softens skin, natural fragrance",
-      image:
-        "https://i.pinimg.com/736x/86/c9/4d/86c94ddd04322d22555c766d5d0c6484.jpg",
-    },
-    {
-      id: 7,
-      name: "Ayurvedic Bath Powder",
-      category: "bath powder",
-      price: "₹500/kg",
-      benefits: "Softens skin, natural fragrance",
-      image:
-        "https://i.pinimg.com/736x/28/af/6e/28af6e60961df70f1bcaacaa7eab9b6e.jpg",
-    },
-    {
-      id: 8,
-      name: "Herbal Holi Colour Powder",
-      category: "holi colors",
-      price: "₹500/kg",
-      benefits: "Chemical-free, skin-friendly",
-      image:
-        "https://i.pinimg.com/736x/eb/32/28/eb3228ee69ef5c129e7c85f1f9794e19.jpg",
-    },
-  ];
-
-  const filteredProducts =
-    activeCategory === "all"
-      ? products
-      : products.filter((product) => product.category === activeCategory);
-
-  const handleProductClick = (id: number) => {
-    // Navigate to dynamic product page
-    router.push(`/product/${id}`);
-  };
-
   return (
-    <section className="herbal-products" id="products">
-      <div className="container">
-        <div className="section-header">
-          <h2>Nature's Healing Powders</h2>
-          <p>100% Organic • Traditional Recipes • Handcrafted with Care</p>
+    <section id="products" className="bg-[#FAF9F6] px-6 py-16 md:py-24">
+      <div className="max-w-6xl mx-auto">
+        <div className="max-w-2xl mb-12 md:mb-16">
+          <p className="uppercase tracking-[0.28em] text-xs text-[#8BA888] mb-3">
+            The collection
+          </p>
+          <h2 className="font-serif text-3xl md:text-5xl text-[#3A4F41] leading-tight">
+            Two herbal powders. That is the ritual.
+          </h2>
+          <p className="mt-4 text-[#3A4F41]/75 text-lg leading-relaxed">
+            We keep the shelf simple — a daily facial powder and a weekly face pack,
+            both mixed fresh at home.
+          </p>
         </div>
 
-        <div className="category-nav">
-          {[
-            "all",
-            "face pack",
-            "nalangu mavu",
-            "bath powder",
-            "holi colors",
-          ].map((category) => (
-            <button
-              key={category}
-              className={activeCategory === category ? "active" : ""}
-              onClick={() => setActiveCategory(category)}
-            >
-              {category === "all"
-                ? "All Products"
-                : category.charAt(0).toUpperCase() + category.slice(1)}
-            </button>
-          ))}
-        </div>
-
-        <div className="products-grid">
-          {filteredProducts.map((product) => (
-            <div
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
+          {featured.map((product, index) => (
+            <article
               key={product.id}
-              className={`product-card ${
-                hoveredProduct === product.id ? "hovered" : ""
-              }`}
-              onMouseEnter={() => setHoveredProduct(product.id)}
-              onMouseLeave={() => setHoveredProduct(null)}
-              onClick={() => handleProductClick(product.id)}
-              style={{ cursor: "pointer" }}
+              className="group bg-white rounded-[28px] overflow-hidden border border-[#3A4F41]/10 shadow-[0_20px_50px_rgba(58,79,65,0.08)] cursor-pointer"
+              onClick={() => router.push(`/product/${product.id}`)}
             >
-              <div className="product-badge">{product.category}</div>
-              <div className="product-image-container">
-                <img
+              <div className="relative h-[22rem] sm:h-[28rem] overflow-hidden bg-[#E8E3D6]">
+                <Image
                   src={product.image}
                   alt={product.name}
-                  className="product-image"
-                  loading="lazy"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                 />
-                <div className="herbal-particles">
-                  {[...Array(5)].map((_, i) => (
-                    <div
-                      key={i}
-                      className="particle"
-                      style={{
-                        top: `${Math.random() * 80 + 10}%`,
-                        left: `${Math.random() * 80 + 10}%`,
-                        animationDelay: `${i * 0.2}s`,
-                        backgroundImage: `url('/images/herb-particle-${
-                          Math.floor(Math.random() * 3) + 1
-                        }.png')`,
-                      }}
-                    ></div>
-                  ))}
+                <div className="absolute top-5 left-5">
+                  <span className="inline-block bg-[#3A4F41] text-white text-[11px] uppercase tracking-[0.2em] px-3 py-1.5 rounded-full">
+                    {index === 0 ? "Everyday ritual" : "Weekly ritual"}
+                  </span>
                 </div>
               </div>
-              <div className="product-info">
-                <h3>{product.name}</h3>
-                <p className="benefits">{product.benefits}</p>
-                <div className="price-container">
-                  <span className="price">{product.price}</span>
-                  <button className="add-to-cart">
-                    <span className="icon">🛒</span> Add
+
+              <div className="p-7 md:p-9">
+                <h3 className="font-serif text-2xl md:text-3xl text-[#3A4F41] mb-2">
+                  {product.name}
+                </h3>
+                <p className="text-[#3A4F41]/70 leading-relaxed mb-6">
+                  {product.description}
+                </p>
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <div>
+                    <p className="text-sm uppercase tracking-widest text-[#8BA888]">From</p>
+                    <p className="text-2xl font-serif text-[#3A4F41]">₹{startingPrice}</p>
+                    <p className="text-xs text-[#3A4F41]/55 mt-0.5">+ courier on every size</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      router.push(`/product/${product.id}`);
+                    }}
+                    className="bg-[#8BA888] text-white font-semibold px-7 py-3 rounded-full hover:bg-[#3A4F41] transition"
+                  >
+                    Choose size
                   </button>
                 </div>
               </div>
-            </div>
+            </article>
           ))}
+        </div>
+
+        <div className="mt-14 bg-white border border-[#3A4F41]/10 rounded-2xl px-6 py-7 md:px-10">
+          <h3 className="font-serif text-xl text-[#3A4F41] mb-1">Sizes &amp; prices</h3>
+          <p className="text-sm text-[#3A4F41]/70 mb-5">
+            Same for both powders. Courier is extra on every pack.
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {sizeOptions.map((size) => (
+              <div key={size.id} className="rounded-xl bg-[#FAF9F6] px-4 py-4">
+                <p className="font-semibold text-[#3A4F41]">{size.label}</p>
+                <p className="text-[#8BA888] font-medium mt-1">
+                  ₹{size.price} {size.courierNote}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
